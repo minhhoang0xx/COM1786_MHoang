@@ -1,61 +1,164 @@
 package com.example.hoanglmgch210529;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TimePicker;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.hoanglmgch210529.Model.Course;
+import com.example.hoanglmgch210529.db.CourseDatabaseHelper;
+import com.google.android.material.textfield.TextInputEditText;
 
 public class AddCourseActivity extends AppCompatActivity {
 
-    private EditText etDayOfWeek, etTime, etCapacity, etDuration, etPrice, etClassType, etDescription;
+    private TextInputEditText etCapacity, etPrice, etDescription, etDuration; // Thêm etDuration cho thời gian
+    private TimePicker timePicker;
+    private Spinner spinnerDayOfWeek, spinnerClassType;
     private Button btnSubmit;
+    private CourseDatabaseHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_course);
 
-        etDayOfWeek = findViewById(R.id.etDayOfWeek);
-        etTime = findViewById(R.id.etTime);
+        // Initialize DatabaseHelper
+        dbHelper = new CourseDatabaseHelper(this);
+
+        // Initialize views
+        spinnerDayOfWeek = findViewById(R.id.spinnerDayOfWeek);
         etCapacity = findViewById(R.id.etCapacity);
-        etDuration = findViewById(R.id.etDuration);
         etPrice = findViewById(R.id.etPrice);
-        etClassType = findViewById(R.id.etClassType);
         etDescription = findViewById(R.id.etDescription);
+        etDuration = findViewById(R.id.etDuration); // Thêm ô nhập liệu duration
+        timePicker = findViewById(R.id.timePicker);
+        spinnerClassType = findViewById(R.id.spinnerClassType);
         btnSubmit = findViewById(R.id.btnSubmit);
 
+        // Setup Spinner for Day of Week
+        ArrayAdapter<CharSequence> adapterDayOfWeek = ArrayAdapter.createFromResource(this,
+                R.array.days_of_week, android.R.layout.simple_spinner_item);
+        adapterDayOfWeek.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerDayOfWeek.setAdapter(adapterDayOfWeek);
+
+        // Setup TimePicker
+        timePicker.setIs24HourView(true);
+
+        // Setup Spinner for Class Type
+        ArrayAdapter<CharSequence> adapterClassType = ArrayAdapter.createFromResource(this,
+                R.array.class_types, android.R.layout.simple_spinner_item);
+        adapterClassType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerClassType.setAdapter(adapterClassType);
+
+        // Submit Button
         btnSubmit.setOnClickListener(v -> {
-            // Xử lý nhập liệu
-            String dayOfWeek = etDayOfWeek.getText().toString();
-            String time = etTime.getText().toString();
-            String capacity = etCapacity.getText().toString();
-            String duration = etDuration.getText().toString();
-            String price = etPrice.getText().toString();
-            String classType = etClassType.getText().toString();
-            String description = etDescription.getText().toString();
+            if (validateInput()) {
+                // Lấy thông tin đã nhập
+                String dayOfWeek = spinnerDayOfWeek.getSelectedItem().toString();
+                int hour = timePicker.getHour();
+                int minute = timePicker.getMinute();
+                String time = String.format("%02d:%02d", hour, minute);
+                int minutesInput = Integer.parseInt(etDuration.getText().toString().trim());
+                int hours = minutesInput / 60;
+                int minutes = minutesInput % 60;
+                String duration = String.format("%dh%02d", hours, minutes);
+                String classType = spinnerClassType.getSelectedItem().toString();
+                int capacity = Integer.parseInt(etCapacity.getText().toString().trim());
+                double price = Double.parseDouble(etPrice.getText().toString().trim());
+                String priceFormatted = "$" + String.format("%.2f", price);
+                String description = etDescription.getText().toString().trim();
 
-            // Kiểm tra các trường bắt buộc
-            if (dayOfWeek.isEmpty() || time.isEmpty() || capacity.isEmpty() ||
-                    duration.isEmpty() || price.isEmpty() || classType.isEmpty()) {
-                Toast.makeText(AddCourseActivity.this, "Please fill in all required fields", Toast.LENGTH_SHORT).show();
-                return;
+                // Tạo chuỗi hiển thị thông tin người dùng đã nhập
+                String message = "Day of Week: " + dayOfWeek + "\n" +
+                        "Time: " + time + "\n" +
+                        "Duration: " + duration + "\n" +
+                        "Class Type: " + classType + "\n" +
+                        "Capacity: " + capacity + "\n" +
+                        "Price: " + priceFormatted + "\n" +
+                        "Description: " + description;
+
+                // Tạo AlertDialog để xác nhận thông tin
+                new androidx.appcompat.app.AlertDialog.Builder(AddCourseActivity.this)
+                        .setTitle("Confirm Course Details")
+                        .setMessage(message)
+                        .setPositiveButton("OK", (dialog, which) -> {
+                            saveCourse();
+                        })
+                        .setNegativeButton("Cancel", (dialog, which) -> {
+                            dialog.dismiss();
+                        })
+                        .show();
             }
-
-            // Nếu nhập hợp lệ, hiển thị thông tin khóa học
-            String message = "Course Details:\n" +
-                    "Day of Week: " + dayOfWeek + "\n" +
-                    "Time: " + time + "\n" +
-                    "Capacity: " + capacity + "\n" +
-                    "Duration: " + duration + "\n" +
-                    "Price: " + price + "\n" +
-                    "Class Type: " + classType + "\n" +
-                    "Description: " + description;
-
-            Toast.makeText(AddCourseActivity.this, message, Toast.LENGTH_LONG).show();
-
-            // Xử lý lưu vào database ở đây (nếu cần)
         });
+
+    }
+
+    private boolean validateInput() {
+        // Kiểm tra nếu bất kỳ trường bắt buộc nào bị bỏ trống
+        if (etCapacity.getText().toString().trim().isEmpty()) {
+            Toast.makeText(this, "Capacity is required", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (etPrice.getText().toString().trim().isEmpty()) {
+            Toast.makeText(this, "Price is required", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (etDuration.getText().toString().trim().isEmpty()) {
+            Toast.makeText(this, "Description is required", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        try {
+            int capacity = Integer.parseInt(etCapacity.getText().toString().trim());
+            double price = Double.parseDouble(etPrice.getText().toString().trim());
+            int duration = Integer.parseInt(etDuration.getText().toString().trim());
+            if (capacity <= 0 || price <= 0 || duration <= 0) {
+                Toast.makeText(this, "Capacity, Price, and Duration must be positive", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Please enter valid numbers", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;  // Tất cả các trường đã được điền đầy đủ
+    }
+
+    private void saveCourse() {
+        try {
+            // Retrieve input data
+            String dayOfWeek = spinnerDayOfWeek.getSelectedItem().toString();
+            int hour = timePicker.getHour();
+            int minute = timePicker.getMinute();
+            String time = String.format("%02d:%02d", hour, minute);
+            int minutesInput = Integer.parseInt(etDuration.getText().toString().trim());  // Lấy số phút nhập vào
+            int hours = minutesInput / 60;  // Tính giờ
+            int minutes = minutesInput % 60;  // Lấy phần dư (phút)
+            String duration = String.format("%dh%02d", hours, minutes);
+            String classType = spinnerClassType.getSelectedItem().toString();
+            int capacity = Integer.parseInt(etCapacity.getText().toString().trim());
+            double price =  Double.parseDouble(etPrice.getText().toString().trim());
+
+            String description = etDescription.getText().toString().trim();
+
+            // Create Course object
+            Course course = new Course(dayOfWeek,time,capacity,duration,price,classType,description);
+
+            // Save course to database
+            dbHelper.addCourse(course);
+
+            // Return result to previous activity
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("newCourse", course);
+            setResult(RESULT_OK, resultIntent);
+            Toast.makeText(this, "Course added successfully", Toast.LENGTH_SHORT).show();
+            finish();
+        } catch (Exception e) {
+            Toast.makeText(this, "Error saving course: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 }
+

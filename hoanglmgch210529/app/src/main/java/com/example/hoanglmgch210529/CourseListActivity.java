@@ -7,10 +7,12 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.hoanglmgch210529.Model.Course;
 import com.example.hoanglmgch210529.adapter.CourseAdapter;
+import com.example.hoanglmgch210529.db.CourseDatabaseHelper;
 import java.util.ArrayList;
 import java.util.List;
-import com.example.hoanglmgch210529.db.CourseDatabaseHelper;
 
 public class CourseListActivity extends AppCompatActivity {
     private CourseDatabaseHelper dbHelper;
@@ -23,19 +25,18 @@ public class CourseListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_list);
 
+        dbHelper = new CourseDatabaseHelper(this);
         rvCourses = findViewById(R.id.rvCourses);
         Button btnAddCourse = findViewById(R.id.btnAddCourse);
-        dbHelper = new CourseDatabaseHelper(this);
 
-        // Khởi tạo danh sách khóa học
-        courseList = dbHelper.getAllCourses();
-
-        // Cấu hình RecyclerView
-        rvCourses.setLayoutManager(new LinearLayoutManager(this));
+        courseList = new ArrayList<>();
         courseAdapter = new CourseAdapter(this, courseList);
+
+        rvCourses.setLayoutManager(new LinearLayoutManager(this));
         rvCourses.setAdapter(courseAdapter);
 
-        // Thiết lập sự kiện click cho nút Add Course
+        loadCourses();
+
         btnAddCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,16 +46,23 @@ public class CourseListActivity extends AppCompatActivity {
         });
     }
 
+    private void loadCourses() {
+        courseList.clear();
+        courseList.addAll(dbHelper.getAllCourses());
+        courseAdapter.notifyDataSetChanged();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == RESULT_OK) {
-            Course newCourse = (Course) data.getSerializableExtra("newCourse");
-            if (newCourse != null) {
-                dbHelper.addCourse(newCourse);
-                courseList.add(newCourse);
-                courseAdapter.notifyDataSetChanged(); // Cập nhật RecyclerView
-            }
+            loadCourses(); // Tải lại danh sách khóa học sau khi thêm mới
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadCourses(); // Tải lại danh sách mỗi khi activity được resume
     }
 }

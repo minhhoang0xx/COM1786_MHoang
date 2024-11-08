@@ -16,7 +16,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);dấddsad
+        setContentView(R.layout.activity_login);
 
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
@@ -26,21 +26,24 @@ public class LoginActivity extends AppCompatActivity {
             // Xử lý đăng nhập
             String email = etEmail.getText().toString();
             String password = etPassword.getText().toString();
-
-            if (email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(LoginActivity.this, "Please enter email and password", Toast.LENGTH_SHORT).show();
-            } else {
-                if (email.equals("hoang") && password.equals("123123")) {
-                    Toast.makeText(LoginActivity.this, "Signed In Successfully", Toast.LENGTH_SHORT).show();
-                    // Chuyển đến HomeActivity sau khi đăng nhập thành công
-                    Intent intent = new Intent(LoginActivity.this, CourseListActivity.class);
-                    startActivity(intent);
-                    // Kết thúc LoginActivity để ngăn quay lại trang đăng nhập khi nhấn nút Back
-                    finish();
-                } else {
-                    Toast.makeText(LoginActivity.this, "Invalid email or password", Toast.LENGTH_SHORT).show();
-                }
-            }
+            Intent intent = new Intent(LoginActivity.this, CourseListActivity.class);
+            startActivity(intent);
+            // Kết thúc LoginActivity để ngăn quay lại trang đăng nhập khi nhấn nút Back
+            finish();
+//            if (email.isEmpty() || password.isEmpty()) {
+//                Toast.makeText(LoginActivity.this, "Please enter email and password", Toast.LENGTH_SHORT).show();
+//            } else {
+//                if (email.equals("hoang") && password.equals("123123")) {
+//                    Toast.makeText(LoginActivity.this, "Signed In Successfully", Toast.LENGTH_SHORT).show();
+//                    // Chuyển đến HomeActivity sau khi đăng nhập thành công
+//                    Intent intent = new Intent(LoginActivity.this, CourseListActivity.class);
+//                    startActivity(intent);
+//                    // Kết thúc LoginActivity để ngăn quay lại trang đăng nhập khi nhấn nút Back
+//                    finish();
+//                } else {
+//                    Toast.makeText(LoginActivity.this, "Invalid email or password", Toast.LENGTH_SHORT).show();
+//                }
+//            }
         });
     }
 }

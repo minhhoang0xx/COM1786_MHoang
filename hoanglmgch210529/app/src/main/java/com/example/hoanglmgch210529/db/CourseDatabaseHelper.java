@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.hoanglmgch210529.Course;
+import com.example.hoanglmgch210529.Model.Course;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +15,8 @@ public class CourseDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "yoga_courses.db";
     private static final int DATABASE_VERSION = 1;
-    public static final String TABLE_COURSES = "courses";
 
+    public static final String TABLE_COURSES = "courses";
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_DAY_OF_WEEK = "day_of_week";
     public static final String COLUMN_TIME = "time";
@@ -74,8 +74,8 @@ public class CourseDatabaseHelper extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                Course course = new Course();
-                // Kiểm tra giá trị trả về từ getColumnIndex()
+                // Kiểm tra chỉ số cột trước khi lấy giá trị
+                int idIndex = cursor.getColumnIndex(COLUMN_ID);
                 int dayOfWeekIndex = cursor.getColumnIndex(COLUMN_DAY_OF_WEEK);
                 int timeIndex = cursor.getColumnIndex(COLUMN_TIME);
                 int capacityIndex = cursor.getColumnIndex(COLUMN_CAPACITY);
@@ -84,29 +84,27 @@ public class CourseDatabaseHelper extends SQLiteOpenHelper {
                 int classTypeIndex = cursor.getColumnIndex(COLUMN_CLASS_TYPE);
                 int descriptionIndex = cursor.getColumnIndex(COLUMN_DESCRIPTION);
 
-                if (dayOfWeekIndex != -1) {
-                    course.setDayOfWeek(cursor.getString(dayOfWeekIndex));
-                }
-                if (timeIndex != -1) {
-                    course.setTime(cursor.getString(timeIndex));
-                }
-                if (capacityIndex != -1) {
-                    course.setCapacity(cursor.getInt(capacityIndex));
-                }
-                if (durationIndex != -1) {
-                    course.setDuration(cursor.getString(durationIndex));
-                }
-                if (priceIndex != -1) {
-                    course.setPrice(cursor.getDouble(priceIndex));
-                }
-                if (classTypeIndex != -1) {
-                    course.setClassType(cursor.getString(classTypeIndex));
-                }
-                if (descriptionIndex != -1) {
-                    course.setDescription(cursor.getString(descriptionIndex));
-                }
+                // Kiểm tra xem chỉ số cột có hợp lệ không
+                if (idIndex != -1 && dayOfWeekIndex != -1 && timeIndex != -1 && capacityIndex != -1
+                        && durationIndex != -1 && priceIndex != -1 && classTypeIndex != -1) {
 
-                courseList.add(course);
+                    // Lấy giá trị của các cột nếu chỉ số hợp lệ
+                    int id = cursor.getInt(idIndex);
+                    String dayOfWeek = cursor.getString(dayOfWeekIndex);
+                    String time = cursor.getString(timeIndex);
+                    int capacity = cursor.getInt(capacityIndex);
+                    String duration = cursor.getString(durationIndex);
+                    double price = cursor.getDouble(priceIndex);
+                    String classType = cursor.getString(classTypeIndex);
+                    String description = cursor.getString(descriptionIndex); // Có thể là null
+
+                    // Tạo đối tượng Course với dữ liệu từ database
+                    Course course = new Course(dayOfWeek, time, capacity, duration, price, classType, description);
+                    course.setId(id);
+
+                    // Thêm khóa học vào danh sách
+                    courseList.add(course);
+                }
             } while (cursor.moveToNext());
         }
         cursor.close();
@@ -115,5 +113,40 @@ public class CourseDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    // Thêm các phương thức khác như xóa hoặc cập nhật khóa học nếu cần
+
+    public void deleteCourse(int courseId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        // Kiểm tra nếu ID hợp lệ
+        if (courseId > 0) {
+            db.delete(TABLE_COURSES, COLUMN_ID + " = ?", new String[]{String.valueOf(courseId)});
+        }
+        db.close();
+    }
+
+    // Phương thức cập nhật khóa học
+    public void updateCourse(Course course) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_DAY_OF_WEEK, course.getDayOfWeek());
+        values.put(COLUMN_TIME, course.getTime());
+        values.put(COLUMN_CAPACITY, course.getCapacity());
+        values.put(COLUMN_DURATION, course.getDuration());
+        values.put(COLUMN_PRICE, course.getPrice());
+        values.put(COLUMN_CLASS_TYPE, course.getClassType());
+        values.put(COLUMN_DESCRIPTION, course.getDescription());
+
+        // Cập nhật theo ID
+        db.update(TABLE_COURSES, values, COLUMN_ID + " = ?", new String[]{String.valueOf(course.getId())});
+        db.close();
+    }
+
+    // Phương thức lấy khóa học theo ID
+
+    public Cursor getCourseById(int courseId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_COURSES + " WHERE " + COLUMN_ID + " = ?";
+        return db.rawQuery(query, new String[]{String.valueOf(courseId)});
+    }
+
+
 }
