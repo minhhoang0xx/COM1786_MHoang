@@ -4,7 +4,71 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b386389b-f148-4994-8845-ad906938abb0" name="Changes" comment="" />
+    <list default="true" id="b386389b-f148-4994-8845-ad906938abb0" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/.idea/deploymentTargetSelector.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/.idea/gradle.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/.idea/migrations.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/build.gradle.kts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/proguard-rules.pro" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/androidTest/java/com/example/hoanglmgch210529/ExampleInstrumentedTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/java/com/example/hoanglmgch210529/AddCourseActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/java/com/example/hoanglmgch210529/CourseDetailActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/java/com/example/hoanglmgch210529/CourseListActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/java/com/example/hoanglmgch210529/LoginActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/java/com/example/hoanglmgch210529/MainActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/java/com/example/hoanglmgch210529/Model/Course.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/java/com/example/hoanglmgch210529/SearchActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/java/com/example/hoanglmgch210529/adapter/CourseAdapter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/java/com/example/hoanglmgch210529/db/CourseDatabaseHelper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/res/drawable/background.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/res/drawable/edittext_background.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/res/drawable/ic_delete.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/res/drawable/ic_launcher_background.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/res/drawable/ic_launcher_foreground.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/res/layout/activity_add_course.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/res/layout/activity_course_detail.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/res/layout/activity_course_list.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/res/layout/activity_login.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/res/layout/activity_main.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/res/layout/item_course.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/res/mipmap-hdpi/ic_launcher.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/res/mipmap-hdpi/ic_launcher_round.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/res/mipmap-mdpi/ic_launcher.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/res/mipmap-mdpi/ic_launcher_round.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/res/mipmap-xhdpi/ic_launcher.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/res/mipmap-xhdpi/ic_launcher_round.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/res/mipmap-xxhdpi/ic_launcher.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/res/values-night/themes.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/res/values/colors.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/res/values/themes.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/res/xml/backup_rules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/main/res/xml/data_extraction_rules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/app/src/test/java/com/example/hoanglmgch210529/ExampleUnitTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/build.gradle.kts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/gradle.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/gradle/libs.versions.toml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/gradlew" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/gradlew.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hoanglmgch210529/settings.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -14,11 +78,14 @@
     <option name="formatViaClangd" value="false" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/hoanglmgch210529" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 7
-}]]></component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
   <component name="ProjectId" id="2oZzgG0A1Up74MuNfcmkVDk6xrJ" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -32,8 +99,9 @@
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
     "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
+    "settings.editor.selected.configurable": "AndroidSdkUpdater",
     "show.migrate.to.gradle.popup": "false"
   }
 }]]></component>

@@ -2,11 +2,12 @@ package com.example.hoanglmgch210529;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.hoanglmgch210529.Course.CourseListActivity;
 
 public class LoginActivity extends AppCompatActivity {
 

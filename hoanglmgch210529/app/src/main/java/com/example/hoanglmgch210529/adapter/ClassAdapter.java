@@ -15,50 +15,53 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hoanglmgch210529.Class.ClassListActivity;
-import com.example.hoanglmgch210529.Course.CourseDetailActivity;
-import com.example.hoanglmgch210529.Model.Course;
+import com.example.hoanglmgch210529.Class.ClassDetailActivity;
+import com.example.hoanglmgch210529.Model.ClassInstance;
 import com.example.hoanglmgch210529.R;
 import com.example.hoanglmgch210529.db.CourseDatabaseHelper;
+
 import java.util.List;
 
-public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseViewHolder> {
+public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHolder> {
     private Context context;
-    private List<Course> courseList;
+    private List<ClassInstance> instanceList;
     private CourseDatabaseHelper dbHelper;
 
-    public CourseAdapter(Context context, List<Course> courseList) {
+    public ClassAdapter(Context context, List<ClassInstance> instanceList) {
         this.context = context;
-        this.courseList = courseList;
+        this.instanceList = instanceList;
         this.dbHelper = new CourseDatabaseHelper(context); // Khởi tạo database helper
     }
 
     @NonNull
     @Override
-    public CourseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_course, parent, false);
-        return new CourseViewHolder(view);
+    public ClassViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.item_class, parent, false);
+        return new ClassViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CourseViewHolder holder, int position) {
-        Course course = courseList.get(position);
-        String priceFormatted = String.format("%.0f", course.getPrice());
-        holder.tvCourseName.setText(course.getClassType() + " - " + course.getDayOfWeek() + " - " + course.getTime());
-        holder.tvCourseDetails.setText("Capacity: " + course.getCapacity() + " | Duration: " + course.getDuration() +" | Price: £" + priceFormatted);
+    public void onBindViewHolder(@NonNull ClassViewHolder holder, int position) {
+        ClassInstance classInstance = instanceList.get(position);
 
+        // Hiển thị thông tin của từng `ClassInstance`
+        holder.tvClassInfo.setText(  "Teacher: " + classInstance.getTeacher());
+        holder.tvClassDetails.setText(classInstance.getDate());
+
+        // Listener cho nút "Edit"
         holder.btnEdit.setOnClickListener(v -> {
-            Intent intent = new Intent(context, CourseDetailActivity.class);
-            intent.putExtra("courseId", course.getId());
-            context.startActivity(intent);
-        });
-        // Set listener cho nút xóa
-        holder.btnDelete.setOnClickListener(v-> {
-            showDeleteDialog(position);
+//            Intent intent = new Intent(context, ClassDetailActivity.class);
+//            intent.putExtra("instanceId", classInstance.getId());
+//            context.startActivity(intent);
         });
 
+        // Listener cho nút "Delete"
+        holder.btnDelete.setOnClickListener(v -> showDeleteDialog(position));
+
+        // Khi nhấn vào item sẽ chuyển đến `ClassListActivity`
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, ClassListActivity.class);
-            intent.putExtra("courseId", course.getId());
+            intent.putExtra("instanceId", classInstance.getId());
             context.startActivity(intent);
         });
     }
@@ -70,9 +73,9 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Course courseDelete = courseList.get(position);
-                dbHelper.deleteCourse(courseDelete.getId()); // Giả sử có phương thức deleteCourse trong CourseDatabaseHelper
-                courseList.remove(position);  // Xóa khóa học khỏi danh sách
+                ClassInstance instanceToDelete = instanceList.get(position);
+                dbHelper.deleteClassInstance(instanceToDelete.getId()); // Giả sử có phương thức deleteClassInstance trong CourseDatabaseHelper
+                instanceList.remove(position);  // Xóa khỏi danh sách
                 notifyItemRemoved(position);  // Cập nhật lại RecyclerView
                 Toast.makeText(context, "Class deleted successfully", Toast.LENGTH_SHORT).show();
             }
@@ -83,19 +86,19 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
 
     @Override
     public int getItemCount() {
-        return courseList.size();
+        return instanceList.size();
     }
 
-    public static class CourseViewHolder extends RecyclerView.ViewHolder {
-        TextView tvCourseName;
-        TextView tvCourseDetails;
+    public static class ClassViewHolder extends RecyclerView.ViewHolder {
+        TextView tvClassInfo;
+        TextView tvClassDetails;
         ImageButton btnDelete;
         ImageButton btnEdit;
 
-        public CourseViewHolder(@NonNull View itemView) {
+        public ClassViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvCourseName = itemView.findViewById(R.id.tvCourseName);
-            tvCourseDetails = itemView.findViewById(R.id.tvCourseDetails);
+            tvClassInfo = itemView.findViewById(R.id.tvClassInfo);
+            tvClassDetails = itemView.findViewById(R.id.tvClassDetails);
             btnDelete = itemView.findViewById(R.id.btnDelete);
             btnEdit = itemView.findViewById(R.id.btnEdit);
         }
