@@ -50,9 +50,9 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
 
         // Listener cho nút "Edit"
         holder.btnEdit.setOnClickListener(v -> {
-//            Intent intent = new Intent(context, ClassDetailActivity.class);
-//            intent.putExtra("instanceId", classInstance.getId());
-//            context.startActivity(intent);
+            Intent intent = new Intent(context, ClassDetailActivity.class);
+            intent.putExtra("instanceId", classInstance.getId());
+            context.startActivity(intent);
         });
 
         // Listener cho nút "Delete"
@@ -60,7 +60,7 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
 
         // Khi nhấn vào item sẽ chuyển đến `ClassListActivity`
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, ClassListActivity.class);
+            Intent intent = new Intent(context, ClassDetailActivity.class);
             intent.putExtra("instanceId", classInstance.getId());
             context.startActivity(intent);
         });
@@ -88,6 +88,7 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
     public int getItemCount() {
         return instanceList.size();
     }
+
 
     public static class ClassViewHolder extends RecyclerView.ViewHolder {
         TextView tvClassInfo;

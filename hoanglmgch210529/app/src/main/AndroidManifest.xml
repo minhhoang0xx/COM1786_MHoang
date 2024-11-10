@@ -13,9 +13,6 @@
         android:theme="@style/Theme.Hoanglmgch210529"
         tools:targetApi="31">
         <activity
-            android:name=".Class.ClassDetailActivity"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -29,7 +26,8 @@
         <activity android:name=".Course.AddCourseActivity" />
         <activity android:name=".Course.CourseDetailActivity" />
         <activity android:name=".Class.ClassListActivity" />
-
+        <activity android:name=".Class.AddClassActivity" />
+        <activity android:name=".Class.ClassDetailActivity" />
     </application>
 
 </manifest>

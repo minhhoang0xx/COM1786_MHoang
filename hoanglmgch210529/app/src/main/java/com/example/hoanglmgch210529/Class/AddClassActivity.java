@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.hoanglmgch210529.Model.ClassInstance;
 import com.example.hoanglmgch210529.R;
 import com.example.hoanglmgch210529.db.CourseDatabaseHelper;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -23,7 +24,6 @@ public class AddClassActivity extends AppCompatActivity {
     private Button btnSubmit;
     private CourseDatabaseHelper dbHelper;
     private int courseId;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,22 +57,17 @@ public class AddClassActivity extends AppCompatActivity {
 
                 // Tạo đối tượng ClassInstance
                 ClassInstance classInstance = new ClassInstance(courseId, formattedDate, teacher, comments);
-                boolean isInserted = dbHelper.addClassInstance(classInstance);
+                dbHelper.addClassInstance(classInstance); // Thêm vào cơ sở dữ liệu
 
-                if (isInserted) {
-                    Intent resultIntent = new Intent();
-                    resultIntent.putExtra("newClassInstance", classInstance);
-                    setResult(RESULT_OK, resultIntent);
-
-                    Toast.makeText(this, "Class instance added successfully", Toast.LENGTH_SHORT).show();
-                    finish();
-                } else {
-                    Toast.makeText(this, "Error adding class instance", Toast.LENGTH_SHORT).show();
-                }
+                // Gửi thông tin kết quả về ClassListActivity
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("newClassInstance", classInstance); // Truyền đối tượng classInstance mới
+                setResult(RESULT_OK, resultIntent);
+                Toast.makeText(this, "Class instance added successfully", Toast.LENGTH_SHORT).show();
+                finish(); // Đóng AddClassActivity
             }
         });
     }
-
     private void showDatePicker() {
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
@@ -100,28 +95,57 @@ public class AddClassActivity extends AppCompatActivity {
     }
 
     private boolean isDateValid(Calendar selectedDate) {
-        // Giả sử bạn lấy dayOfWeek từ cơ sở dữ liệu (VD: 1 = Chủ nhật, 2 = Thứ hai, ..., 7 = Thứ bảy)
-        int courseDayOfWeek = getCourseDayOfWeekFromDatabase(courseId);
+        // Lấy dayOfWeek từ cơ sở dữ liệu
+        String courseDayOfWeek = getCourseDayOfWeekFromDatabase(courseId);
+
+        // Chuyển đổi dayOfWeek từ String sang int
+        int courseDayOfWeekInt = convertDayOfWeekToInt(courseDayOfWeek);
 
         // Lấy ngày trong tuần từ ngày đã chọn
         int selectedDayOfWeek = selectedDate.get(Calendar.DAY_OF_WEEK);
 
         // Kiểm tra nếu ngày đã chọn trùng với lịch học
-        return selectedDayOfWeek == courseDayOfWeek;
+        return selectedDayOfWeek == courseDayOfWeekInt;
     }
 
-    // Hàm giả định để lấy dayOfWeek từ cơ sở dữ liệu
-    private int getCourseDayOfWeekFromDatabase(int courseId) {
-        // Ví dụ: truy vấn từ database để lấy dayOfWeek của khóa học
-        // Giả sử bạn trả về 3 (Thứ Ba) cho khóa học này
+    // Hàm chuyển đổi dayOfWeek từ String sang int (1 = Chủ nhật, 2 = Thứ Hai, ..., 7 = Thứ Bảy)
+    private int convertDayOfWeekToInt(String dayOfWeek) {
+        switch (dayOfWeek) {
+            case "Sunday":
+                return 1;
+            case "Monday":
+                return 2;
+            case "Tuesday":
+                return 3;
+            case "Wednesday":
+                return 4;
+            case "Thursday":
+                return 5;
+            case "Friday":
+                return 6;
+            case "Saturday":
+                return 7;
+            default:
+                // Trả về giá trị mặc định hoặc throw Exception nếu không hợp lệ
+                return -1;
+        }
+    }
+
+    // Hàm lấy dayOfWeek từ cơ sở dữ liệu
+    private String getCourseDayOfWeekFromDatabase(int courseId) {
+        // Giả sử bạn đã lấy dayOfWeek từ database, trả về giá trị String
+        // Ví dụ: nếu ngày học là Thứ Ba, bạn sẽ trả về "Tuesday"
         return dbHelper.getCourseDayOfWeek(courseId);
     }
 
     private boolean validateInput() {
+        // Kiểm tra nếu trường "Date" không được điền
         if (etDate.getText().toString().trim().isEmpty()) {
             Toast.makeText(this, "Date is required", Toast.LENGTH_SHORT).show();
             return false;
         }
+
+        // Kiểm tra nếu trường "Teacher" không được điền
         if (etTeacher.getText().toString().trim().isEmpty()) {
             Toast.makeText(this, "Teacher is required", Toast.LENGTH_SHORT).show();
             return false;

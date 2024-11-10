@@ -62,7 +62,7 @@ public class ClassListActivity extends AppCompatActivity {
     }
 
     private void addClassInstance() {
-        Intent intent = new Intent(this, ClassAdapter.class);
+        Intent intent = new Intent(this, AddClassActivity.class);
         intent.putExtra("courseId", courseId);
         startActivityForResult(intent, 1);
     }
@@ -76,8 +76,20 @@ public class ClassListActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            loadClassInstances();
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
+            // Lấy class instance mới từ Intent
+            ClassInstance newInstance = (ClassInstance) data.getSerializableExtra("newClassInstance");
+            if (newInstance != null) {
+                // Thêm vào danh sách hiện tại
+                classInstances.add(newInstance);
+                // Cập nhật Adapter
+                adapter.notifyItemInserted(classInstances.size() - 1);
+                // Scroll đến item mới
+                rvInstance.scrollToPosition(classInstances.size() - 1);
+            }
         }
     }
+
+
+
 }

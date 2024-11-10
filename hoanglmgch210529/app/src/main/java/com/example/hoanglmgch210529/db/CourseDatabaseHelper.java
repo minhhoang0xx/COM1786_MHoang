@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.example.hoanglmgch210529.Model.ClassInstance;
 import com.example.hoanglmgch210529.Model.Course;
@@ -16,7 +17,7 @@ public class CourseDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "yoga_courses.db";
     private static final int DATABASE_VERSION = 1;
-// table and colum of Course
+    // table and colum of Course
     public static final String TABLE_COURSES = "courses";
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_DAY_OF_WEEK = "day_of_week";
@@ -35,6 +36,7 @@ public class CourseDatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_INSTANCE_DATE = "date";
     public static final String COLUMN_INSTANCE_TEACHER = "teacher";
     public static final String COLUMN_INSTANCE_COMMENTS = "comments";
+
     public CourseDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -64,13 +66,13 @@ public class CourseDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-
-
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_COURSES);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CLASS_INSTANCES);
-        onCreate(db);
+        if (oldVersion != newVersion) {
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_COURSES);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_CLASS_INSTANCES);
+            onCreate(db);
+        }
     }
 
     // Thêm khóa học vào cơ sở dữ liệu
@@ -136,7 +138,6 @@ public class CourseDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-
     public void deleteCourse(int courseId) {
         SQLiteDatabase db = this.getWritableDatabase();
         // Kiểm tra nếu ID hợp lệ
@@ -189,7 +190,7 @@ public class CourseDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         // Truy vấn lấy dữ liệu với điều kiện courseId
-        Cursor cursor = db.query(TABLE_CLASS_INSTANCES,null,COLUMN_INSTANCE_COURSE_ID + " = ?",new String[]{String.valueOf(courseId)},null, null, null);
+        Cursor cursor = db.query(TABLE_CLASS_INSTANCES, null, COLUMN_INSTANCE_COURSE_ID + " = ?", new String[]{String.valueOf(courseId)}, null, null, null);
 
         if (cursor != null && cursor.moveToFirst()) {
             try {
@@ -217,6 +218,7 @@ public class CourseDatabaseHelper extends SQLiteOpenHelper {
         return instanceList;
     }
 
+
     // Additional methods to update and delete class instances can be added // here as needed
     public void updateClassInstance(ClassInstance instance) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -228,12 +230,43 @@ public class CourseDatabaseHelper extends SQLiteOpenHelper {
         db.update(TABLE_CLASS_INSTANCES, values, COLUMN_INSTANCE_ID + " = ?", new String[]{String.valueOf(instance.getId())});
         db.close();
     }
+    public Cursor getClassById(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_CLASS_INSTANCES + " WHERE " + COLUMN_INSTANCE_ID + " = ?";
+        return db.rawQuery(query, new String[]{String.valueOf(id)});
+    }
 
     public void deleteClassInstance(int instanceId) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_CLASS_INSTANCES, COLUMN_INSTANCE_ID + " = ?", new String[]{String.valueOf(instanceId)});
         db.close();
     }
+
+
+
+    public String getCourseDayOfWeek(int courseId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        // Truy vấn lấy day_of_week cho courseId tương ứng
+        Cursor cursor = db.rawQuery("SELECT " + COLUMN_DAY_OF_WEEK + " FROM " + TABLE_COURSES + " WHERE " + COLUMN_ID + " = ?", new String[]{String.valueOf(courseId)});
+
+        String dayOfWeek = null; // Khởi tạo biến dayOfWeek là null
+        if (cursor != null && cursor.moveToFirst()) {
+            // Lấy index của cột COLUMN_DAY_OF_WEEK
+            int dayOfWeekIndex = cursor.getColumnIndex(COLUMN_DAY_OF_WEEK);
+
+            if (dayOfWeekIndex >= 0) {
+                dayOfWeek = cursor.getString(dayOfWeekIndex);
+            }
+        }
+        cursor.close();
+        db.close();
+
+        return dayOfWeek;
+    }
 }
+
+
+
+
 
 
